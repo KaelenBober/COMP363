@@ -13,6 +13,11 @@ def alignment(stringA, stringB):
     mismatch = 2
     gap = 1
 
+
+    stringA = stringA.upper()
+    stringB = stringB.upper()
+
+
     # Matrix for the values of the list.
     '''
     I couldn't figure out how to create the matrix, first opting to try with a dictionary, then couldn't create the 
@@ -60,5 +65,5 @@ def P(a,b):
     
 
 
-
-P("INTENTION", "EXECUTION")
+P("Kaelen", "kAELEN")
+P("Crane","Rain")
