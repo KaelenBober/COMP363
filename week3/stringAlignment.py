@@ -52,7 +52,7 @@ def alignment(stringA, stringB):
             matrix[i][j] = min(replace, delete, insert)
 
 
-    return matrix, matrix[i][j]
+    return matrix, matrix[m][n]
 
 '''
 Printing the matrix and the optimal cost of the matrix 
