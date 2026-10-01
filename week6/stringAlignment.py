@@ -23,22 +23,22 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
 
     This gave me the matrix variable I have listed below. 
     '''
-    m = len(stringA)
-    n = len(stringB)
-    matrix = [[0] * (n + 1) for _ in range(m + 1)]
+    m = len(stringA) # columns
+    n = len(stringB) # rows
+    matrix = [[0] * (m + 1) for _ in range(n + 1)]
     #1. Need two base cases for the first row and column of the matrix
     #   first row fill
-    for i in range(m+1):
+    for i in range(n+1):
         matrix[i][0] = i
     #   first column fill
-    for j in range(n+1):
+    for j in range(m+1):
         matrix[0][j] = j
     #2. double for loop, make sure to iterate after the first row and column 
-    for i in range(1,m+1):
-        for j in range(1,n+1):
+    for i in range(1,n+1):
+        for j in range(1,m+1):
 
             #call for i-1 and j-1 to compare to previous cell, compare for match, then fill left and above
-            if stringA[i-1] == stringB[j-1]:
+            if stringB[i-1] == stringA[j-1]:
                 replace = matrix[i-1][j-1] + match
             else:
                 replace = matrix[i-1][j-1] + mismatch
@@ -49,17 +49,7 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
             matrix[i][j] = min(replace, delete, insert)
 
 
-    return matrix, matrix[m][n]
-
-
-def printing_word(matrix):
-
-    
-    pass
-
-
-
-
+    return matrix, matrix[n][m]
 
 
 
@@ -68,11 +58,11 @@ Printing the matrix and the optimal cost of the matrix
 '''
 def P(a,b):
     matrix, optimalCost = alignment(a,b)
+    print(f"x ={b}, y={a}")
     print(f"Optimal cost for switching is: {optimalCost}")
     for i in matrix:
         print(i)
-    
 
 
 P("cats", "cat")
-P("big","large")
+P("dan","bigger")
