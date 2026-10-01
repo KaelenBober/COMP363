@@ -49,10 +49,13 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
             #out of all the choices from the 3 cells, find the cheapest
             matrix[i][j] = min(replace, delete, insert)
 
-
     return matrix, matrix[n][m]
 
 
+def final_form(matrix, a, b):
+    
+    
+    pass
 
 '''
 Printing the matrix and the optimal cost of the matrix 
