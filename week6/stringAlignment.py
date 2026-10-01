@@ -23,14 +23,15 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
 
     This gave me the matrix variable I have listed below. 
     '''
+    #switched rows and columns to make more sense
     m = len(stringA) # columns
     n = len(stringB) # rows
     matrix = [[0] * (m + 1) for _ in range(n + 1)]
     #1. Need two base cases for the first row and column of the matrix
-    #   first row fill
+    #   first column fill, walk down row
     for i in range(n+1):
         matrix[i][0] = i
-    #   first column fill
+    #   first row fill, walk across column
     for j in range(m+1):
         matrix[0][j] = j
     #2. double for loop, make sure to iterate after the first row and column 
