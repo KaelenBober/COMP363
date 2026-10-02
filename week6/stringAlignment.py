@@ -28,10 +28,10 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
     n = len(stringB) # rows
     matrix = [[0] * (m + 1) for _ in range(n + 1)]
     #1. Need two base cases for the first row and column of the matrix
-    #   first column fill, walk down row
+    #   first column fill, walk down rows
     for i in range(n+1):
         matrix[i][0] = i
-    #   first row fill, walk across column
+    #   first row fill, walk across columns
     for j in range(m+1):
         matrix[0][j] = j
     #2. double for loop, make sure to iterate after the first row and column 
@@ -53,20 +53,54 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
 
 
 def final_form(matrix, a, b):
-    
-    
-    pass
+    a = a.upper()
+    b = b.upper()
+    #get the lengths of a and b string, 1 based index because auto filled first row/column
+    m= len(a)
+    n= len(b)
+    j = m #row
+    i = n #columns
+    #initialize empty lists for storing the strings
+    a_complete = []
+    b_complete = []
+    #trace back through matrix, checking where each item got inherited from.\
+    while i > 0 or j > 0:
+        #match or mismatch
+        if a[j] == b[i] and (i > 0 and j > 0):
+            if matrix[i][j] == matrix[i-1][j-1]:
+                a_complete.append[a[i][j]]
+                b_complete.append[b[i][j]]
+                i -= 1
+                j -= 1
+            else:
+                a_complete.append[a[i][j]]
+                b_complete.append[a[i][j]]
+        #delete / above / gap
+        elif i > 0 and matrix[i][j] == matrix[i-1][j] + 1:
+            b_complete.append("_")
+            i -= 1
+        elif j > 0 and matrix[i][j] == matrix[i][j-1] + 1:
+            a_complete.append("_")
+            j -= 1
+
+    a_complete.reverse()
+    b_complete.reverse()
+    return a_complete, b_complete
+
+                
+
+            
+            
 
 '''
 Printing the matrix and the optimal cost of the matrix 
 '''
 def P(a,b):
     matrix, optimalCost = alignment(a,b)
-    print(f"x ={b}, y={a}")
+    print(f"x ={a}, y={b}")
     print(f"Optimal cost for switching is: {optimalCost}")
     for i in matrix:
         print(i)
+    print(final_form(matrix, a ,b))
 
-
-P("cats", "cat")
-P("dan","bigger")
+P("adsf", "asd")
