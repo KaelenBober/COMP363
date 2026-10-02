@@ -52,55 +52,51 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
     return matrix, matrix[n][m]
 
 
+
 def final_form(matrix, a, b):
     a = a.upper()
     b = b.upper()
     #get the lengths of a and b string, 1 based index because auto filled first row/column
     j= len(a)
     i= len(b)
-    #for building word
-    m = j -1  #column
-    n = i -1 #row
     #initialize empty lists for storing the strings
     a_complete = []
     b_complete = []
     #trace back through matrix, checking where each item got inherited from.\
     while i > 0 or j > 0:
         #match or mismatch
-        if i > 0 and j > 0 and a[m] == b[n]:
+        if i > 0 and j > 0 and a[j-1] == b[i-1]:
             if matrix[i][j] == matrix[i-1][j-1]:
-                a_complete.extend(a[m])
-                b_complete.extend(b[n])
+                a_complete.extend(a[j-1])
+                b_complete.extend(b[i-1])
             else:
-                a_complete.extend(a[m])
-                b_complete.extend(b[n])
+                a_complete.extend(a[j-1])
+                b_complete.extend(a[j-1])
             i -= 1
+            j -= 1
+        #insert / left / gap
+        elif j > 0 and matrix[i][j] == matrix[i][j-1] + 1:
+            b_complete.extend("_")
+            a_complete.extend(a[j-1])
             j -= 1
         #delete / above / gap
         elif i > 0 and matrix[i][j] == matrix[i-1][j] + 1:
-            b_complete.extend("_")
-            a_complete.extend(a[m])
-            i -= 1
-        elif j > 0 and matrix[i][j] == matrix[i][j-1] + 1:
+            b_complete.extend(b[i-1])
             a_complete.extend("_")
-            b_complete.extend(b[m])
-            j -= 1
-        else:
-            i -=1
-            j-= 1
-            print("sum wrong")
-        m -=1
-        n -=1
+            i -= 1
 
 
-    print(a_complete)
-    print(b_complete)
 
-                
+    #reverse the list so word is spelt out right, then join into string
+    a_complete.reverse()
+    b_complete.reverse()
+    a_final = " ".join(a_complete)
+    b_final = " ".join(b_complete)
 
-            
-            
+    print(a_final)
+    print(b_final)
 
+        
 '''
 Printing the matrix and the optimal cost of the matrix 
 '''
@@ -110,6 +106,7 @@ def P(a,b):
     print(f"Optimal cost for switching is: {optimalCost}")
     for i in matrix:
         print(i)
+    print()
     final_form(matrix, a ,b)
 
-P("cats", "cat")
+P("kaelen", "bober")
