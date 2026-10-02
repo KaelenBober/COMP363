@@ -56,36 +56,45 @@ def final_form(matrix, a, b):
     a = a.upper()
     b = b.upper()
     #get the lengths of a and b string, 1 based index because auto filled first row/column
-    m= len(a)
-    n= len(b)
-    j = m #row
-    i = n #columns
+    j= len(a)
+    i= len(b)
+    #for building word
+    m = j -1  #column
+    n = i -1 #row
     #initialize empty lists for storing the strings
     a_complete = []
     b_complete = []
     #trace back through matrix, checking where each item got inherited from.\
     while i > 0 or j > 0:
         #match or mismatch
-        if a[j] == b[i] and (i > 0 and j > 0):
-            if matrix[i][j] == matrix[i-1][j-1]:
-                a_complete.append[a[i][j]]
-                b_complete.append[b[i][j]]
-                i -= 1
-                j -= 1
+        if i > 0 and j > 0 and matrix[i][j] == matrix[i-1][j-1]:
+            if a[m] == b[n]:
+                a_complete.extend(a[m])
+                b_complete.extend(b[n])
             else:
-                a_complete.append[a[i][j]]
-                b_complete.append[a[i][j]]
+                a_complete.extend(a[m])
+                b_complete.extend(b[n])
+            i -= 1
+            j -= 1
         #delete / above / gap
         elif i > 0 and matrix[i][j] == matrix[i-1][j] + 1:
-            b_complete.append("_")
+            b_complete.extend("_")
+            a_complete.extend(a[m])
             i -= 1
         elif j > 0 and matrix[i][j] == matrix[i][j-1] + 1:
-            a_complete.append("_")
+            a_complete.extend("_")
+            b_complete.extend(b[m])
             j -= 1
+        else:
+            i -=1
+            j-= 1
+            print("sum wrong")
+        m -=1
+        n -=1
 
-    a_complete.reverse()
-    b_complete.reverse()
-    return a_complete, b_complete
+
+    print(a_complete)
+    print(b_complete)
 
                 
 
@@ -101,6 +110,6 @@ def P(a,b):
     print(f"Optimal cost for switching is: {optimalCost}")
     for i in matrix:
         print(i)
-    print(final_form(matrix, a ,b))
+    final_form(matrix, a ,b)
 
-P("adsf", "asd")
+P("cats", "cat")
