@@ -67,8 +67,8 @@ def final_form(matrix, a, b):
     #trace back through matrix, checking where each item got inherited from.\
     while i > 0 or j > 0:
         #match or mismatch
-        if i > 0 and j > 0 and matrix[i][j] == matrix[i-1][j-1]:
-            if a[m] == b[n]:
+        if i > 0 and j > 0 and a[m] == b[n]:
+            if matrix[i][j] == matrix[i-1][j-1]:
                 a_complete.extend(a[m])
                 b_complete.extend(b[n])
             else:
