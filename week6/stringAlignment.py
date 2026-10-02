@@ -53,7 +53,7 @@ def alignment(stringA, stringB, match = 0, mismatch = 2, gap = 1):
 
 
 
-def final_form(matrix, a, b):
+def traceback(matrix, a, b):
     a = a.upper()
     b = b.upper()
     #get the lengths of a and b string, 1 based index because auto filled first row/column
@@ -106,7 +106,8 @@ def P(a,b):
     print(f"Optimal cost for switching is: {optimalCost}")
     for i in matrix:
         print(i)
-    print()
-    final_form(matrix, a ,b)
+
+    print("\n-OPTIMAL ALIGNMENT-")
+    traceback(matrix, a ,b)
 
 P("kaelen", "bober")
