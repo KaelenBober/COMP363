@@ -181,8 +181,8 @@ This assignment was definitely the hardest one we have been given. Compared to o
 it very easy for me to understand what I needed to do on paper. Starting the code was similar, i thought of it like the graph assignment at first, but having the 
 whole algorithm written out in the book made feel easy, with no big issues than small bugs up until getting to the helper method. That is where my progress pretty much stopped in its tracks. I
 spent most of my time debugging the helper method addAllSafeEdges, with these two problems being my biggest issues.
-1.      I couldn't figure out what how to pass uv into safe[comp[u/v]] like the book did, thinking it was representing I was supposed to pass the weight using graph[u][v]
-    After rereading the algorithm and its description in the book about 100 times I realized I was supposed to be passing the 
+1.      I couldn't figure out what how to pass uv into safe[comp[u/v]] like the book did, thinking it was representing I was supposed to pass just the weight to represent the safeedge 
+    using graph[u][v]. After rereading the algorithm and its description in the book about 100 times I realized I was supposed to be passing the 
     the edge and its weight because it needed a way to be added into t. I tryed a few different ways to store the three, including trying to have a seperate list that stored 
     values, then a dictionary before trying to store it  with a list at each index of safe. Then I had trouble accessing the list, getting back in a similar situation to the graph[u][v].
     I realized going through it slowly that I could just use reverse indexing to access the weight.
