@@ -193,7 +193,7 @@ boruvka algorithm example, it made alot of sense. However, implementing the addA
     values, then a dictionary before trying to store it  with a list at each index of safe. Then I had trouble accessing the list, getting back in a similar situation to the graph[u][v].
     I realized going through it slowly that I could just use reverse indexing to access the weight.
 2.      Returning the safe edges into t was tricky as well. I was getting stuck with the fact I had the list storing my values while I was trying to use a for loop 
-    off of counter like the book did, and couldnt figure out. When i did a read through of the whole method, i realized i could actually just use safe becuase it holds the values directly,
-    then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign the values from each edge individually instead of trying to loop through multiple times, 
-    and then also mirrored it, as I accounted for the repeats earlier in my loop.
+    off of count like the book did, and couldnt figure out how to assign the index count was at to sign while still knowing what was at each index. After some time sitting and staring, re-reading the method,
+    i realized i could actually just use safe becuase it holds the values directly, then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign 
+    the values from each edge together instead of trying to loop through multiple times, and then also mirrored it, as I accounted for the repeats earlier in my loop.
 '''
