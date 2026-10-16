@@ -196,5 +196,6 @@ spent most of my time debugging the helper method addAllSafeEdges, with these th
 
     I would say that this implementation of the boruvka algorithm isnt mine. While I did most of the implementation, the part i got
     assistance trying to figure out was arguably the most important part. I think if I started earlier and and reached out to you for assistance
-    I could have ended up solving it without needing to use other resources, as the notation this time around was very straight forward to me.
+    I could have ended up solving it without needing to use other resources, as the notation this time around was relatively straight forward compared to \
+    other assignments.
 '''
