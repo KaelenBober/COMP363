@@ -177,9 +177,10 @@ print(f"\nExpected total from the hand-trace: {expected_weight} -- {match}")
 '''
 NOTES:
 
-This assignment was definitely the hardest one we have been given. It felt like a rollercoaster of progress.
-I was going over the class example in the slides and following with the book, and after reading through the section on
-boruvka algorithm example, it made alot of sense. However, implementing the addAllSafeEdges helper method was the most frustrating part for me.
+This assignment was definitely the hardest one we have been given. Compared to other assignments the notation felt easier to grasp and the book + the slide show made
+it very easy for me to understand what I needed to do on paper. Starting the code was similar, i thought of it like the graph assignment at first, but having the 
+whole algorithm written out in the book made feel easy, with no big issues than small bugs up until getting to the helper method. That is where my progress pretty much stopped in its tracks. I
+spent most of my time debugging the helper method addAllSafeEdges, with these two problems being my biggest issues.
 1.      I couldn't figure out what how to pass uv into safe[comp[u/v]] like the book did, thinking it was representing I was supposed to pass the weight using graph[u][v]
     After rereading the algorithm and its description in the book about 100 times I realized I was supposed to be passing the 
     the edge and its weight because it needed a way to be added into t. I tryed a few different ways to store the three, including trying to have a seperate list that stored 
@@ -189,4 +190,6 @@ boruvka algorithm example, it made alot of sense. However, implementing the addA
     off of count like the book did, and couldnt figure out how to assign the index count was at to sign while still knowing what was at each index. After some time sitting and staring, re-reading the method,
     i realized i could actually just use safe becuase it holds the values directly, then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign 
     the values from each edge together instead of trying to loop through multiple times, and then also mirrored it, as I accounted for the repeats earlier in my loop.
+3. Accessing the graph in O(ElogV) time was something I didn't figure out. I was having so much trouble trying to figure out the time complexity and spent way too long
+    that I needed to give up on it if I wanted to finish the rest of the method.
 '''
