@@ -69,7 +69,7 @@ def count_label(graph: list[list[float]]) -> tuple[int, list[int]]:
     # yet marked, increment the component count, call reach() to find
     # everything connected to it, label all of those vertices with the
     # current count, and mark them. Return (count, comp).
-    
+
     n = len(graph)
     #comp
     #label_components from graphs assignment
@@ -81,9 +81,9 @@ def count_label(graph: list[list[float]]) -> tuple[int, list[int]]:
             for v in reach(starting_vertex, graph):
                 comp[v] = next_label
             next_label += 1
-    count = len(comp)
+    count = next_label
 
-    return (count, comp)  # placeholder return value
+    return (count, comp)
 
 
 
@@ -133,13 +133,34 @@ def boruvka_mst(graph) -> list[list[float]]:
     #Get count of components 
     count, comp = count_label(t)
     #add components together until there is only one left.
+    
     while count > 1:
-        pass        
+        addAllSafeEdges(graph, t, count, comp)
+        count, comp = count_label(t)
+    return t 
 
 
-    return [[0]]  # placeholder return value
 
 
+def addAllSafeEdges(graph, t, count, comp):
+    #safe has a spot for each component
+    safe = [None] * count
+    #check through graph storing weight
+    n = len(graph)
+    for u in range(n):
+        #need to go over hiogher to not go over twice
+        for v in range(u+1, n):
+            #ignore if no edge
+            if graph[u][v] != float("inf"):
+                #compare two vertices, if not in same component:
+                if comp[u] != comp[v]:
+                    if safe[comp[u]] is None or w < safe[comp[u]]:
+                        safe[comp[u]] = graph[u][v]
+                    if safe[comp[v]] is None or w < safe[comp[v]]:
+                        safe[comp[v]] = graph[u][v]
+                        
+
+    
 
 
 t = boruvka_mst(g)
