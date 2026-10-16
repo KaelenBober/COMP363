@@ -134,7 +134,7 @@ def addAllSafeEdges(graph, t, count, comp):
     #check through graph storing weight
     n = len(graph)
     for u in range(n):
-        #need to go over hiogher to not repeat the same ones in different order
+        #need to go over higher to not repeat the same ones in different order
         for v in range(u+1, n):
             #ignore if no edge
             if graph[u][v] != float("inf"):
