@@ -180,18 +180,21 @@ NOTES:
 This assignment was definitely the hardest one we have been given. Compared to other assignments the notation felt easier to grasp and the book + the slide show made
 it very easy for me to understand what I needed to do on paper. Starting the code was similar, i thought of it like the graph assignment at first, but having the 
 whole algorithm written out in the book made feel easy, with no big issues than small bugs up until getting to the helper method. That is where my progress pretty much stopped in its tracks. I
-spent most of my time debugging the helper method addAllSafeEdges, with these two problems being my biggest issues.
-1.      I couldn't figure out what how to pass uv into safe[comp[u/v]] like the book did, thinking it was representing I was supposed to pass just the weight to represent the safeedge 
-    using graph[u][v]. After rereading the algorithm and its description in the book about 100 times I realized I was supposed to be passing the 
-    the edge and its weight because it needed a way to be added into t. I tried a few different ways to store the three vlaues, including trying to have a seperate list values 
+spent most of my time debugging the helper method addAllSafeEdges, with these three problems being my biggest issues.
+1.      I couldn't figure out what how to pass uv into safe[comp[u/v]] like the book did, thinking it meant I was supposed to pass just the weight to represent the safeedge 
+    using graph[u][v]. After some rereading and whiteboard work, i realized i needed to pass the edge [u][v] and its weight [w] because it needed a way to be added into t. I tried a few different ways to store the three vlaues, including trying to have a seperate list values 
     that stored them, then a dictionary before getting stuck and using claude to give me some guidance. I gave it my code and prompted 
     "I am trying to pass the edge and its weight after comparing the weights of the edge vs safe's index. Without giving me a direct implementation, lead me in the right direction of a way
     to do this."
-    After some trial and error, I ended up with using [u,v,w] to pass the edge and its weight, then accessing the weight directly using -1 index. 
+    After some trial and error, I ended up with using [u,v,w] to pass the edge and its weight, then accessing the weight directly using [-1] index. 
 2.      Returning the safe edges into t was tricky as well. I was getting stuck with the fact I had the list storing my values while I was trying to use a for loop 
-    off of count like the book did, and couldnt figure out how to assign the index count was at to sign while still knowing what was at each index. After some time sitting and staring, re-reading the method,
-    i realized i could actually just use safe becuase it holds the values directly, then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign 
-    the values from each edge together instead of trying to loop through multiple times, and then also mirrored it, as I accounted for the repeats earlier in my loop.
+    off of count like the book did, and couldnt figure out how to assign the index count was at to sign while still knowing what was at each index. After some time sitting and staring, re-reading my method,
+    then finally tracing it out on a table, i realized i could actually just use safe becuase it holds the values directly, then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign 
+    the values from each edge together and then also mirrored it, as I accounted for the repeats earlier in my loop.
 3. Accessing the graph in O(ElogV) time was something I didn't figure out. I was having so much trouble trying to figure out the time complexity and spent way too long
     that I needed to give up on it if I wanted to finish the rest of the method.
+
+    I would say that this implementation of the boruvka algorithm isnt mine. While I did most of the implementation, the part i got
+    assistance trying to figure out was arguably the most important part. I think if I started earlier and and reached out to you for assistance
+    I could have ended up solving it without needing to use other resources, as the notation this time around was very straight forward to me.
 '''
