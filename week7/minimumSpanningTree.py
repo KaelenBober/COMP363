@@ -65,14 +65,8 @@ def count_label(graph: list[list[float]]) -> tuple[int, list[int]]:
         components, and a list where comp[v] is the component label of
         vertex v.
     """
-    # TODO: mark every vertex as unlabeled first. For each vertex not
-    # yet marked, increment the component count, call reach() to find
-    # everything connected to it, label all of those vertices with the
-    # current count, and mark them. Return (count, comp).
-
     n = len(graph)
-    #comp
-    #label_components from graphs assignment
+    #reuse label_components from graphs assignment
     # unlabel everything
     comp = [_] * n
     next_label = 0
@@ -81,6 +75,7 @@ def count_label(graph: list[list[float]]) -> tuple[int, list[int]]:
             for v in reach(starting_vertex, graph):
                 comp[v] = next_label
             next_label += 1
+    #next_label increments wiht new component, you might say its the count pershlaps
     count = next_label
 
     return (count, comp)
@@ -99,8 +94,6 @@ def initialize_mst(graph: list[list[float]]) -> list[list[float]]:
         every entry set to infinity -- this is T before any edges are
         added.
     """
-    # TODO: build and return a new n x n matrix where every entry is
-    # float('inf'). This is the starting point for T.
     n = len(graph)
     t = [[_ for i in range(n)] for j in range(n)]
     return t
@@ -130,9 +123,9 @@ def boruvka_mst(graph) -> list[list[float]]:
     
     #create the edge-less graph
     t = initialize_mst(graph)
-    #Get count of components 
+    #get count of components 
     count, comp = count_label(t)
-    #add components together until there is only one left.
+    #add components together until there is only one left
     
     while count > 1:
         addAllSafeEdges(graph, t, count, comp)
@@ -148,23 +141,31 @@ def addAllSafeEdges(graph, t, count, comp):
     #check through graph storing weight
     n = len(graph)
     for u in range(n):
-        #need to go over hiogher to not go over twice
+        #need to go over hiogher to not repeat the same ones in different order
         for v in range(u+1, n):
             #ignore if no edge
             if graph[u][v] != float("inf"):
-                #compare two vertices, if not in same component:
+                #get edge weight
+                w = graph[u][v]
+                #compare two vertices, if not in same component check for minimal weight, add the edge in with its weight, 
+                #weight comparison over and over
                 if comp[u] != comp[v]:
-                    if safe[comp[u]] is None or w < safe[comp[u]]:
-                        safe[comp[u]] = graph[u][v]
-                    if safe[comp[v]] is None or w < safe[comp[v]]:
-                        safe[comp[v]] = graph[u][v]
-                        
+                    if safe[comp[u]] is None or w < safe[comp[u]][-1]:
+                        safe[comp[u]] = [u,v,w]
+                    if safe[comp[v]] is None or w < safe[comp[v]][-1]:
+                        safe[comp[v]] = [u,v,w]
+    #return the safe edges to t
+    for i in safe:
+        if i is not None:
+            u,v,w = i
+            t[u][v] = w
+            t[v][u] = w
 
-    
 
 
 t = boruvka_mst(g)
-print(t)
+for i in t:
+    print(i)
 no_edge = t[0][0]
 n = len(t)
 edges = [(u, v, t[u][v]) for u in range(n) for v in range(u + 1, n) if t[u][v] != no_edge]
@@ -178,3 +179,21 @@ expected_weight = 31
 match = "matches" if total_weight == expected_weight else "does NOT match"
 print(f"\nExpected total from the hand-trace: {expected_weight} -- {match}")
 
+
+
+'''
+NOTES:
+
+This assignment was definitely the hardest one we have been given. It felt like a rollercoaster of progress.
+I was going over the class example in the slides and following with the book, and after reading through the section on
+boruvka algorithm example, it made alot of sense. However, implementing the addAllSafeEdges helper method was the most frustrating part for me.
+1.      I couldn't figure out what how to pass uv into safe[comp[u/v]] like the book did, thinking it was representing I was supposed to pass the weight using graph[u][v]
+    After rereading the algorithm and its description in the book about 100 times I realized I was supposed to be passing the 
+    the edge and its weight because it needed a way to be added into t. I tryed a few different ways to store the three, including trying to have a seperate list that stored 
+    values, then a dictionary before trying to store it  with a list at each index of safe. Then I had trouble accessing the list, getting back in a similar situation to the graph[u][v].
+    I realized going through it slowly that I could just use reverse indexing to access the weight.
+2.      Returning the safe edges into t was tricky as well. I was getting stuck with the fact I had the list storing my values while I was trying to use a for loop 
+    off of counter like the book did, and couldnt figure out. When i did a read through of the whole method, i realized i could actually just use safe becuase it holds the values directly,
+    then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign the values from each edge individually instead of trying to loop through multiple times, 
+    and then also mirrored it, as I accounted for the repeats earlier in my loop.
+'''
