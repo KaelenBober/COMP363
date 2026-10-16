@@ -187,7 +187,7 @@ spent most of my time debugging the helper method addAllSafeEdges, with these tw
     that stored them, then a dictionary before getting stuck and using claude to give me some guidance. I gave it my code and prompted 
     "I am trying to pass the edge and its weight after comparing the weights of the edge vs safe's index. Without giving me a direct implementation, lead me in the right direction of a way
     to do this."
-    After some trial and error, I ended up with using [u,v,w] and accessing the weight directly using -1 index. 
+    After some trial and error, I ended up with using [u,v,w] to pass the edge and its weight, then accessing the weight directly using -1 index. 
 2.      Returning the safe edges into t was tricky as well. I was getting stuck with the fact I had the list storing my values while I was trying to use a for loop 
     off of count like the book did, and couldnt figure out how to assign the index count was at to sign while still knowing what was at each index. After some time sitting and staring, re-reading the method,
     i realized i could actually just use safe becuase it holds the values directly, then do something similar to "safe[comp[u]] = [u,v,w]" but backwards. I used it to assign 
