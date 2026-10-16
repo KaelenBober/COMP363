@@ -113,14 +113,7 @@ def boruvka_mst(graph) -> list[list[float]]:
     Returns:
         list[list]: a working-copy-shaped matrix containing only the
         edges of the minimum spanning tree.
-    """
-    # TODO: initialize an edgeless working copy T of graph (see
-    # initialize_mst), then count_label it. While more than one
-    # component remains: for each component, find its cheapest edge
-    # crossing to a different component (look up weights in graph, not
-    # T); add each component's chosen edge into T; recount and relabel
-    # components. Return T once a single component remains.
-    
+    """    
     #create the edge-less graph
     t = initialize_mst(graph)
     #get count of components 
