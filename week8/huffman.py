@@ -273,11 +273,11 @@ class Huffman:
         #    cursor to the root. If it is not, keep reading bits.
         #  - Never look ahead: the code is prefix-free, so the first leaf you
         #    reach is the symbol.
-
+        
 
         result = ""
         #guard for no tree
-        if encoded_message == None:
+        if self.get_root() == None:
             result = self._NO_TREE_ERROR
 
         # list to store the message, will join later
@@ -295,12 +295,9 @@ class Huffman:
             if cursor.is_leaf(): #at symbol
                 decoded_message.append(cursor.get_symbol())
                 cursor = root # reset to root
-
         #join message together 
         result = "".join(decoded_message)
         return result
-
-
 
 
 
@@ -319,7 +316,27 @@ class Huffman:
         #  - Visit every node once. Add 1 for each, and 8 more when the node
         #    is a leaf. For a tree with n leaves, how many nodes are there in
         #    total? Use that to check your answer.
-        pass
+        if self.get_root() is None:
+            raise ValueError(self._NO_TREE_ERROR)
+
+        result = 0
+        stack: list[Node] = [self.get_root()]  # type: ignore
+        # depth-first.
+        while stack:
+            node = stack.pop()
+
+            if node.is_leaf():
+                # 1+8.
+                result += 9
+            else:
+                # internal node costs 1 bit
+                result += 1
+                stack.append(node.get_left())  
+                stack.append(node.get_right()) 
+
+        return result
+
+
 
 
 def measure_compression(message: str) -> dict[str, int]:
@@ -336,7 +353,17 @@ def measure_compression(message: str) -> dict[str, int]:
     #  - ASCII costs 8 bits for every character of the message, repeats
     #    included.
     #  - Fill in a result dictionary and return it once, at the end.
-    pass
+    measure_huff = Huffman()
+    encoded = measure_huff.encode(message)
+    tree_bits = measure_huff.tree_size_in_bits()
+
+    data = {"ascii_bits": len(message)*8,
+            "message_bits": len(encoded),
+            "tree_bits": tree_bits,
+            "total_bits": len(encoded) + tree_bits}
+    return data
+
+    
 
 
 if __name__ == "__main__":
