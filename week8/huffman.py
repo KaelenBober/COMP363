@@ -35,7 +35,6 @@ class Node:
         # Huffman.__build_huffman_tree) is what gives a node its children.
         self.__left: Node | None = None
         self.__right: Node | None = None
-
     def __lt__(self, other: Node) -> bool:
         """Orders nodes by frequency, so that two nodes can be compared with <.
         Python's < operator calls this method; it is the same job that
@@ -381,18 +380,39 @@ if __name__ == "__main__":
     # Your own experiments go here: read a plain-text book from Project
     # Gutenberg, compress it, and call measure_compression.
     #Frankenstein by Mary Shelley
+    #https://www.gutenberg.org/files/6542/6542-readme.txt
+
+    print(f"\n\nGUTENBERG")
+    #used claude to make the file reading code, didn't use it for my response for Q2.
+    path = r"C:\Users\kaele\Downloads\frankenstein.txt"
+
+    with open(path, encoding="utf-8") as f:
+        text = f.read()
+
+    # drop every non-ASCII character (curly quotes, accented letters, BOM, etc.)
+    text = text.encode("ascii", "ignore").decode()
+
+    huffmanp = Huffman()
+    encodedp = huffmanp.encode(text)
+    print(huffmanp.decode(encodedp) == text)
+    print(measure_compression(text))
+
 
 
 
 
     #asizeof
-    asizeof.asizeof(huffman.get_root())
-    print(huffman.tree_size_in_bits)
+    print(f"\nasizeof")
+    print(asizeof.asizeof(huffman.get_root()))
+    print("tree bits")
+    data = measure_compression("hello world")
+    print(data["tree_bits"])
+    print()
 
     #PRACTICE SENTENCES
     s1 = "pizazz pizza"
     s2 = "what should we get for dinner tonight, i was thinking chinese."
-    s3 = "eleven through up to thirty eight"
+    s3 = "baller faller"
     s4 = "dlrow olleh"
 
     huffman = Huffman()
@@ -424,7 +444,6 @@ if __name__ == "__main__":
     print(f"\n\n")
     huffman3 = Huffman()
     encoded3 = huffman3.encode(s3)
-    print(encoded3)
     print(huffman3.decode(encoded3))
     print(huffman3.decode(encoded3) == s3)
     print(measure_compression(s3))
@@ -449,13 +468,21 @@ if __name__ == "__main__":
     1.The huffman coding and the tree bits actually goes over the ascii bits, tree_bits
     by itself narrowly beats it, but adding message_bits puts the total over by 23 bits.
 
-    2.  
+    2.  {'ascii_bits'  : 175368,
+         'message_bits': 106251,
+         'tree_bits'   : 799,
+         'total_bits'  : 107050}
+        The total is 61.04% the size of ascii.
+        The tree_bits is about 7.2 times greater than the total_bits of the hello world case
+
 
     3. A message has to be roughly 33 characters and over for its huffman total to beat its ascii.
     For the tree to cost almost nothing, it would have to be a very short sentence, using alot of the same letters.
 
-    4. 
+    4. asizeof measures the total size cost, while tree_bits measures how many bits needed to transmit the tree.
+        asizeof = 3104 and tree_bits = 79. The receiver cares about the asizeof value 
+        because thats how much space itll be using on their actual computer.
 
     5. Testing with hello word and its reversed counterpart, nothing we measure is changed, the only thing that gets
-    changed is how the tree is formed and which symbols get which code. 
+        changed is how the tree is formed and which symbols get which code. 
     '''
