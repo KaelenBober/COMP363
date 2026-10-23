@@ -456,5 +456,6 @@ if __name__ == "__main__":
 
     4. 
 
-    5.
+    5. Testing with hello word and its reversed counterpart, nothing we measure is changed, the only thing that gets
+    changed is how the tree is formed and which symbols get which code. 
     '''
