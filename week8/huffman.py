@@ -273,31 +273,29 @@ class Huffman:
         #    cursor to the root. If it is not, keep reading bits.
         #  - Never look ahead: the code is prefix-free, so the first leaf you
         #    reach is the symbol.
-        
+
+
         result = ""
-        #Guard for no tree
-        if encoded_message == "":
+        #guard for no tree
+        if encoded_message == None:
             result = self._NO_TREE_ERROR
 
         # list to store the message, will join later
-        decoded_message = [] # will hold decoded letters individually
-        cursor = huffman.__huffman_root #root
-        temp = [] # feel like i need this
+        decoded_message = []
+        root = self.get_root()
+        cursor = root
         #travel down the tree from the root
         for bit in range(len(encoded_message)):
         #compare each bit in the encoded message to left and right
             if encoded_message[bit] == self._LEFT:
-                cursor = cursor.set_left()
-                decoded_message.append(encoded_message[bit])
+                cursor = cursor.get_left()
             else:
-                cursor= cursor.set_right()
-                decoded_message.append(encoded_message[bit])
-            #check if at leaf, if yes, get symbol and reset the cursor
-            if cursor == cursor.is_leaf: #at symbol
+                cursor = cursor.get_right()
+            #each step, check if at the leaf
+            if cursor.is_leaf(): #at symbol
                 decoded_message.append(cursor.get_symbol())
-                cursor = 0 # reset to root
-                print("foundletter")
-        
+                cursor = root # reset to root
+
         #join message together 
         result = "".join(decoded_message)
         return result
