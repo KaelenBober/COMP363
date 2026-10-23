@@ -16,6 +16,8 @@ at least two distinct symbols, and all of them must be ASCII.
 """
 
 from __future__ import annotations
+from urllib.request import urlopen
+from pympler import asizeof
  
 
 class Node:
@@ -357,10 +359,10 @@ def measure_compression(message: str) -> dict[str, int]:
     encoded = measure_huff.encode(message)
     tree_bits = measure_huff.tree_size_in_bits()
 
-    data = {"ascii_bits": len(message)*8,
+    data = {"ascii_bits"  : len(message)*8,
             "message_bits": len(encoded),
-            "tree_bits": tree_bits,
-            "total_bits": len(encoded) + tree_bits}
+            "tree_bits"   : tree_bits,
+            "total_bits"  : len(encoded) + tree_bits}
     return data
 
     
@@ -378,3 +380,81 @@ if __name__ == "__main__":
 
     # Your own experiments go here: read a plain-text book from Project
     # Gutenberg, compress it, and call measure_compression.
+    #Frankenstein by Mary Shelley
+
+
+
+
+    #asizeof
+    asizeof.asizeof(huffman.get_root())
+    print(huffman.tree_size_in_bits)
+
+    #PRACTICE SENTENCES
+    s1 = "pizazz pizza"
+    s2 = "what should we get for dinner tonight, i was thinking chinese."
+    s3 = "eleven through up to thirty eight"
+    s4 = "dlrow olleh"
+
+    huffman = Huffman()
+    encoded = huffman.encode("hello world")
+    print(encoded)
+    print(huffman.decode(encoded))
+    print(huffman.decode(encoded) == "hello world")
+    print(measure_compression("hello world"))
+
+    print(f"\n\n")
+    huffman1 = Huffman()
+    encoded1 = huffman1.encode(s1)
+    print(encoded1)
+    print(huffman1.decode(encoded1))
+    print(huffman1.decode(encoded1) == s1)
+    print(measure_compression(s1))
+    print(len(s1))
+
+    print(f"\n\n")
+    huffman2 = Huffman()
+    encoded2 = huffman2.encode(s2)
+    print(encoded2)
+    print(huffman2.decode(encoded2))
+    print(huffman2.decode(encoded2) == s2)
+    print(measure_compression(s2))
+    print(len(s2))
+
+
+    print(f"\n\n")
+    huffman3 = Huffman()
+    encoded3 = huffman3.encode(s3)
+    print(encoded3)
+    print(huffman3.decode(encoded3))
+    print(huffman3.decode(encoded3) == s3)
+    print(measure_compression(s3))
+    print(len(s3))
+
+
+    print(f"\n\n")
+    huffman4 = Huffman()
+    encoded4 = huffman4.encode(s4)
+    print(encoded4)
+    print(huffman4.decode(encoded4))
+    print(huffman4.decode(encoded4) == s4)
+    print(measure_compression(s4))
+    print(len(s4))
+
+
+
+
+
+    '''
+    MEASURING QUESTIONS
+    1.The huffman coding and the tree bits actually goes over the ascii bits, tree_bits
+    by itself narrowly beats it, but adding message_bits puts the total over by 23 bits.
+
+    2.  
+
+    3. A message has to be roughly 33 characters and over for its huffman total to beat its ascii.
+    For the tree to cost almost nothing, it would have to be a very short sentence, using alot of the same letters.
+
+    4. 
+
+    5.
+    '''
