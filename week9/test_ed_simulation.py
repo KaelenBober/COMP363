@@ -1,5 +1,5 @@
 from ed_simulation_363 import simulate, random_tier, arrival_happens, treatment_minutes, TIERS, TIER_WEIGHTS, TREATMENT_MINUTES, SEED
-from random import *
+import random
 import inspect
 
 

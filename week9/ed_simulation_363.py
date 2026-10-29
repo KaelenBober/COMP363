@@ -1,5 +1,5 @@
 from heap363 import MinHeap363
-from random import *
+import random
 
 # Given -- simulation settings. PLACEHOLDER values.
 LIFE_THREATENING = 1
