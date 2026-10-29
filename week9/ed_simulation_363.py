@@ -49,8 +49,7 @@ print("share of each tier in 10,000 picks:",
 # TODO -- write the three helpers and simulate().
 def random_tier() -> int:
     """Return a random severity from TIERS, chosen according to TIER_WEIGHTS."""
-    tier = NON_LIFE_THREATENING
-    # TODO
+    tier = random.choice(TIERS, TIER_WEIGHTS)
     return tier
 
 
