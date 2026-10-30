@@ -51,14 +51,14 @@ print("share of each tier in 10,000 picks:",
 # TODO -- write the three helpers and simulate().
 def random_tier() -> int:
     """Return a random severity from TIERS, chosen according to TIER_WEIGHTS."""
-    tier = random.choices(tier, TIER_WEIGHTS, k=1)[0]
+    tier = random.choices(TIERS, weights = TIER_WEIGHTS, k=1)[0]
     return tier
 
 
 def arrival_happens(arrival_prob: float) -> bool:
     """Return True with probability arrival_prob."""
     happens = False
-    happens == random.random() < arrival_prob
+    happens = random.random() < arrival_prob
     return happens
 
 
