@@ -1,3 +1,5 @@
+from xmlrpc.client import TRANSPORT_ERROR
+
 from heap363 import MinHeap363
 import random
 
@@ -49,21 +51,21 @@ print("share of each tier in 10,000 picks:",
 # TODO -- write the three helpers and simulate().
 def random_tier() -> int:
     """Return a random severity from TIERS, chosen according to TIER_WEIGHTS."""
-    tier = random.choice(TIERS, TIER_WEIGHTS)
+    tier = random.choices(tier, TIER_WEIGHTS, k=1)[0]
     return tier
 
 
 def arrival_happens(arrival_prob: float) -> bool:
     """Return True with probability arrival_prob."""
     happens = False
-    # TODO
+    happens == random.random() < arrival_prob
     return happens
 
 
 def treatment_minutes(tier: int) -> int:
     """Return a random treatment length for tier, within TREATMENT_MINUTES[tier]."""
-    minutes = 0
-    # TODO
+    low, high = TREATMENT_MINUTES[tier]
+    minutes = random.randint(low,high)
     return minutes
 
 
