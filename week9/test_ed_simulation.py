@@ -1,4 +1,4 @@
-from ed_simulation_363 import simulate, random_tier, arrival_happens, treatment_minutes, TIERS, TIER_WEIGHTS, TREATMENT_MINUTES, SEED
+from ed_simulation_363 import simulate, random_tier, arrival_happens, treatment_minutes, average_wait, SIM_MINUTES, TIERS, TIER_WEIGHTS, TREATMENT_MINUTES, SEED
 import random
 import inspect
 

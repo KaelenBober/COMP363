@@ -1,3 +1,4 @@
+from turtle import st
 from xmlrpc.client import TRANSPORT_ERROR
 from heap363 import MinHeap363
 import random
@@ -19,12 +20,16 @@ TREATMENT_MINUTES = {
 }
 
 ARRIVAL_PROB = 0.25          # chance of one arrival in any given minute (about 15 per hour)
-NUM_DOCTORS = 12
+NUM_DOCTORS = 3
 SIM_MINUTES = 7 * 24 * 60    # one week
 SEED = 363                   # same seed -> same "random" week, so runs can be compared
 
 # Most patients the waiting room can hold at once. PLACEHOLDER.
 WAITING_ROOM_CAPACITY = 60
+
+TIER_NAMES = {LIFE_THREATENING: "life-threatening",
+              SEVERE: "severe",
+              NON_LIFE_THREATENING: "non-life-threatening"}
 
 
 
@@ -84,7 +89,6 @@ def simulate(num_doctors: int, arrival_prob: float, minutes: int,
              for tier in TIERS}
     stats["room"] = {"peak_waiting": 0, "first_full_minute": None,
                      "waiting_sum": 0, "busy_sum": 0}
-    num_doctors = 0
     #waiting room
     waiting = MinHeap363()
     #list of doctors, when they are free
@@ -93,7 +97,7 @@ def simulate(num_doctors: int, arrival_prob: float, minutes: int,
     #treatment
     for minute in range(minutes):
         for doctor in range(num_doctors):
-            if free_at[doctor] <= minutes and waiting.size() > 0:
+            if free_at[doctor] <= minute and waiting.size() > 0:
                 #get patient
                 patient_severity, patient_minute = waiting.get()
                 #check their wait time 
@@ -101,9 +105,73 @@ def simulate(num_doctors: int, arrival_prob: float, minutes: int,
                 # update that severity's seen and total wait
                 stats[patient_severity]["seen"] += 1
                 stats[patient_severity]["total_wait"] += wait
+                #update when that doctor is free
                 free_at[doctor] = minute + treatment_minutes(patient_severity)
 
+        #arrival
+        if arrival_happens(arrival_prob):
+            tier = random_tier()
+            stats[tier]["arrived"] += 1
+            if waiting.size() >= capacity:
+                stats[tier]["turned_away"] += 1
+            else:
+                waiting.add((tier, minute))
 
-    #arrival
+        #room stats
+        in_room = waiting.size()
+        # check if people in the waiting room is larger than the previous minutes peak
+        if in_room > stats["room"]["peak_waiting"]:
+            stats["room"]["peak_waiting"] = in_room
+        if stats["room"]["first_full_minute"] is None and in_room >= capacity:
+            stats["room"]["first_full_minute"] = minute
+        stats["room"]["waiting_sum"] += in_room
+        for doctor in range(num_doctors):
+            if free_at[doctor] > minute:
+                stats["room"]["busy_sum"] += 1
+        
+    for patient in waiting.storage:
+        severity = patient[0]
+        stats[severity]["still_waiting"] += 1
 
     return stats
+
+
+def average_wait(stats: dict, tier: int) -> float | None:
+    """Average wait, in minutes, of the patients of `tier` who were seen."""
+    average = None
+    if stats[tier]["seen"] > 0:
+        average = stats[tier]["total_wait"] / stats[tier]["seen"]
+    return average
+
+
+def print_report(stats: dict) -> None:
+    print(f"{'severity':22s} {'arrived':>8s} {'seen':>6s} {'waiting':>8s} {'turned away':>12s} {'avg wait (min)':>15s}")
+    for tier in TIERS:
+        s = stats[tier]
+        avg = average_wait(stats, tier)
+        shown = "--" if avg is None else f"{avg:.1f}"
+        print(f"{TIER_NAMES[tier]:22s} {s['arrived']:8d} {s['seen']:6d} "
+              f"{s['still_waiting']:8d} {s['turned_away']:12d} {shown:>15s}")
+    room = stats["room"]
+    print(f"waiting room: peak {room['peak_waiting']}, first full at minute {room['first_full_minute']}")
+
+
+print_report(simulate(NUM_DOCTORS, ARRIVAL_PROB, SIM_MINUTES, seed=SEED))
+
+
+
+
+
+# Given -- how many doctors does this ED need?
+print(f"arrival_prob = {ARRIVAL_PROB}, one week, seed = {SEED}\n")
+print(f"{'doctors':>7s}  " + "  ".join(f"{TIER_NAMES[t]:>22s}" for t in TIERS))
+for doctors in range(6, 17):
+    stats = simulate(doctors, ARRIVAL_PROB, SIM_MINUTES, seed=SEED)
+    cells = []
+    for tier in TIERS:
+        avg = average_wait(stats, tier)
+        shown = "--" if avg is None else f"{avg:.0f}"
+        cells.append(f"{shown:>10s} min, {stats[tier]['still_waiting']:4d} left, {stats[tier]['turned_away']:4d} out")
+    print(f"{doctors:7d}  " + "  ".join(f"{c:>22s}" for c in cells))
+
+
