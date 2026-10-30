@@ -1,5 +1,4 @@
 from xmlrpc.client import TRANSPORT_ERROR
-
 from heap363 import MinHeap363
 import random
 
@@ -48,7 +47,7 @@ print("share of each tier in 10,000 picks:",
 
 
 
-# TODO -- write the three helpers and simulate().
+# TODO -- write simulate().
 def random_tier() -> int:
     """Return a random severity from TIERS, chosen according to TIER_WEIGHTS."""
     tier = random.choices(TIERS, weights = TIER_WEIGHTS, k=1)[0]
@@ -85,5 +84,26 @@ def simulate(num_doctors: int, arrival_prob: float, minutes: int,
              for tier in TIERS}
     stats["room"] = {"peak_waiting": 0, "first_full_minute": None,
                      "waiting_sum": 0, "busy_sum": 0}
-    # TODO
+    num_doctors = 0
+    #waiting room
+    waiting = MinHeap363()
+    #list of doctors, when they are free
+    free_at = [0] * num_doctors
+
+    #treatment
+    for minute in range(minutes):
+        for doctor in range(num_doctors):
+            if free_at[doctor] <= minutes and waiting.size() > 0:
+                #get patient
+                patient_severity, patient_minute = waiting.get()
+                #check their wait time 
+                wait = minute - patient_minute
+                # update that severity's seen and total wait
+                stats[patient_severity]["seen"] += 1
+                stats[patient_severity]["total_wait"] += wait
+                free_at[doctor] = minute + treatment_minutes(patient_severity)
+
+
+    #arrival
+
     return stats
