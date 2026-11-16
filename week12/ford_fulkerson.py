@@ -1,6 +1,5 @@
 from copy import deepcopy
-
-
+from test_graphs.py import GRAPH_A, GRAPH_B, SOURCE
 """Week 11 starter: Ford-Fulkerson, maximum flow and minimum cut.
 
 A flow network is a directed acyclic graph stored as an adjacency matrix:
@@ -100,7 +99,7 @@ def find_augmenting_path(residual, current, target, path_so_far):
         result = path_so_far + [current]
     else:
         result = None
-        for v in range(0, len(residual)):
+        for v in range(len(residual)):
             #if a neighbor is found and it isnt the same as current
             #restart the search from the found vertex and add the current vertex into the path
                 #need to make sure that the vertex isnt the same as current and isnt in the path, without these, it can create a loop
@@ -117,16 +116,16 @@ def bottleneck(residual, path):
     revise' scan from COMP 170. Do not use min().
     """
     #assuming the first edge is the smallest
-    weakest = residual[path[0]][path[1]]
+    smallest = residual[path[0]][path[1]]
 
     #loop through rest of the edges, start 1 ahead to skip current weakest edge.
-    #make sure to end before last element to not mess up [i + 1]
+    #make sure to end before last element to not go beyond length
     for i in range(1,len(path)-1):
         #if next edge is smaller than our current weakest
-            #set edge to weakest
-        if residual[path[i]][path[i+1]] < weakest:
-            weakest = residual[path[i]][path[i+1]]
-    return weakest
+        #set edge to weakest
+        if residual[path[i]][path[i+1]] < smallest:
+            smallest = residual[path[i]][path[i+1]]
+    return smallest
 
 
 def saturate(residual, path, flow):
@@ -152,9 +151,19 @@ def reachable(residual, source):
     class suggests depth-first. A set (not a list) means each vertex counts
     once.
     """
-    # TODO: replace the next line with your code.
     seen = set()
+    #DFS = stack
+    stack = [source]
+    while len(stack) > 0:
+        vertex = stack.pop()
+        #add values into seen if not already there, from there check if it is above 
+        if vertex not in seen:
+            seen.add(vertex)
+            for j in range(len(residual)):
+                if residual[vertex][j] > 0 and j not in seen:
+                    stack.append(j)
     return seen
+
 
 
 def cut_edges(graph, reachable_set):
@@ -164,8 +173,13 @@ def cut_edges(graph, reachable_set):
     u is in S, v is not, and graph[u][v] > 0. For every u in S, consider every
     v in T (the 11/6 class). Edges from T back into S are not part of the cut.
     """
-    # TODO: replace the next line with your code.
     crossing = []
+    for u in reachable_set:
+        for v in range(len(graph)):
+            #v is in not in the reachable set
+            #graphs value at graph[u][v] > 0
+            if v not in reachable_set and graph[u][v] > 0:
+                crossing.append((u,v))
     return crossing
 
 
@@ -180,11 +194,30 @@ def ford_fulkerson(graph, source, target):
     Raise ValueError if the graph is not acyclic (Part B gives you is_acyclic
     for exactly this).
     """
+    if is_acyclic(graph) == False:
+        raise ValueError("Theres a loop")
+    
+
     max_flow = 0  # pessimistic: no flow, no cut
     cut = []
-    # TODO: replace the two lines above with your code.
+    #create the residual graph
+    residual = deep_copy(graph)
+    #get start path
+    path = find_augmenting_path(residual, source, target, [])
+    #keep emptying the path
+    #keep updating the flow for max flow
+    while path is not None:
+        flow = bottleneck(residual, path)
+        saturate(residual,path, flow)
+        max_flow += flow
+        path = find_augmenting_path(residual, source, target, [])
+    #get the reachable set for getting the cutt
+    reachable_set = reachable(residual,source)
+    cut = cut_edges(graph, reachable_set)
     return (max_flow, cut)
 
+long_flow, long_cut = ford_fulkerson(GRAPH_A, SOURCE, len(GRAPH_A) - 1)
+(print(long_flow,long_cut))
 
 # --------------------------- Part B ----------------------------------
 
@@ -199,9 +232,31 @@ def is_acyclic(graph):
     vertex, there was no cycle; if you get stuck with vertices left over, each
     with an incoming edge, there is one. Any correct method is welcome.
     """
-    # TODO: replace the next line with your code.
-    acyclic = False
-    return acyclic
+    n = len(graph)
+    #copy of the graph
+    work = deep_copy(graph)
+    removed = [False] * n
+    #counter for removed vertices
+    count = 0
+    #progress = acyclic in this case
+    progress = True
+    while progress:
+        progress = False
+        for v in range(n):
+            if not removed[v]:
+                has_incoming = False
+                # loop u over range(n): if work[u][v] > 0, has_incoming = True
+                for u in range(n):
+                    if work[u][v] > 0:
+                        has_incoming = True
+                if not has_incoming:
+                    removed[v] = True
+                    count += 1
+                    # loop w over range(n): set work[v][w] = 0
+                    for w in range(n):
+                        work[v][w] = 0
+                    progress = True
+    return count == n
 
 
 def test_is_acyclic() -> None:
@@ -214,6 +269,7 @@ def test_is_acyclic() -> None:
       * a graph with a cycle that does not pass through the source.
     Explain in a comment, for each, what it would catch.
     """
+
     pass  # TODO: write your asserts here
 
 
@@ -356,3 +412,12 @@ if __name__ == "__main__":
     maximum, edges = ford_fulkerson(CLASS_GRAPH, 0, 7)
     print(f"Maximum flow: {maximum}")
     print("Minimum cut: " + ", ".join(f"{NAMES[u]}->{NAMES[v]}" for u, v in edges))
+
+
+"""
+QUESTIONS:
+1. 
+2. If i made a shallow copy of the graph, the test to see if the graph comes back unchanged would fail because a shallow copy would take the 
+    changes on the residual and impact the original graph
+3. 
+"""
